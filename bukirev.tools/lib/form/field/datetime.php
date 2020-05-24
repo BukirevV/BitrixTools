@@ -14,9 +14,10 @@ class DateTime extends Field
     const TYPE = 'div';
     const ELEMENT = '<#TYPE# class="ui-ctl-element">#VALUE#</#TYPE#>';
     protected $template =
-        '<div class="ui-ctl ui-ctl-datetime #MOD#">
+        '<div class="ui-ctl ui-ctl-after-icon ui-ctl-datetime #MOD#">
             #BEFORE#
             #AFTER#
+            <div class="ui-ctl-ext-after ui-ctl-icon-calendar"></div>
             #ELEMENT#
         </div>';
 }

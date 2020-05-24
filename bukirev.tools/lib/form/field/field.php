@@ -24,12 +24,15 @@ use Bukirev\Tools\Form\Field\Modifier\Width;
  * @property string $value
  * @property string $template
  * @property string $out
+ * @property string $placeholder
+ * @property string $label
+ * @property string $labelTemplate
  *
  */
 class Field implements FieldInterface
 {
     const TYPE = 'text';
-    const ELEMENT = '<input type="#TYPE#" class="ui-ctl-element" value="#VALUE#">';
+    const ELEMENT = '<input type="#TYPE#" class="ui-ctl-element" value="#VALUE#" placeholder="#PLACEHOLDER#">';
     protected $name;
     protected $id;
     protected $arrModifier = [];
@@ -44,6 +47,10 @@ class Field implements FieldInterface
             #ELEMENT#
         </div>';
     protected $out;
+    protected $label;
+    protected $placeholder;
+    protected $labelTemplate = '<div>#LABEL#:</div>';
+
 
     public function __construct(string $name, array $property = null)
     {
@@ -150,6 +157,11 @@ class Field implements FieldInterface
         $this->prepareElement();
         $this->prepareMod();
 
+        if (!empty($this->label)) {
+            $this->out = $this->labelTemplate.$this->out;
+            $this->prepareLabel();
+        }
+
         return $this->out;
     }
 
@@ -157,6 +169,7 @@ class Field implements FieldInterface
     {
         $elem =  str_replace('#TYPE#', static::TYPE, static::ELEMENT);
         $elem =  str_replace('#VALUE#', $this->value, $elem);
+        $elem =  str_replace('#PLACEHOLDER#', $this->placeholder, $elem);
 
         $this->out = str_replace('#ELEMENT#', $elem, $this->out);
     }
@@ -174,6 +187,11 @@ class Field implements FieldInterface
     public function prepareMod(): void
     {
         $this->out = str_replace('#MOD#', $this->getModifierString(), $this->out);
+    }
+
+    public function prepareLabel(): void
+    {
+        $this->out = str_replace('#LABEL#', $this->label, $this->out);
     }
 
     public function setTemplate($templ)
